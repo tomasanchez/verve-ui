@@ -1,0 +1,70 @@
+import React, { useRef, useEffect } from "react";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import ChatMessage from "./ChatMessage";
+import { spacing } from "../../theme/theme.js";
+
+function ChatWindow({ messages, initialGreeting }) {
+  const messagesEndRef = useRef(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  return (
+    <Box
+      sx={{
+        flexGrow: 1, // Takes up available space
+        overflowY: "auto", // Enables scrolling
+        paddingTop: spacing(2),
+        paddingBottom: spacing(1),
+        display: "flex",
+        flexDirection: "column",
+        // Max width for content on larger screens, centered
+        maxWidth: { xs: "100%", sm: "600px", md: "750px" },
+        margin: "0 auto",
+      }}
+    >
+      {messages.length === 0 && initialGreeting && (
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            flexGrow: 1,
+            textAlign: "center",
+            paddingBottom: spacing(10), // Space from bottom for input
+          }}
+        >
+          <Typography
+            variant="h4"
+            component="h1"
+            sx={{
+              fontWeight: "normal",
+              fontSize: { xs: "2rem", sm: "2.5rem", md: "3rem" }, // Responsive font size
+              background:
+                "linear-gradient(90deg, #4285F4, #EA4335, #FBBC04, #34A853)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+            }}
+          >
+            {initialGreeting}
+          </Typography>
+        </Box>
+      )}
+
+      {messages.map((msg, index) => (
+        <ChatMessage key={index} message={msg} />
+      ))}
+      <div ref={messagesEndRef} />
+      {/* Scroll target */}
+    </Box>
+  );
+}
+
+export default ChatWindow;
