@@ -20,13 +20,14 @@ function ChatWindow({ messages, initialGreeting, onTypingComplete }) {
       sx={{
         flexGrow: 1, // Takes up available space
         overflowY: "auto", // Enables scrolling
-        paddingTop: spacing(2),
+        paddingTop: spacing(3),
         paddingBottom: spacing(1),
         display: "flex",
         flexDirection: "column",
         width: "100%",
         maxWidth: { xs: "100%", sm: "600px", md: "750px", lg: "900px" },
         margin: "0 auto",
+        marginTop: spacing(1),
       }}
     >
       {messages.length === 0 && initialGreeting && (
