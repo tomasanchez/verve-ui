@@ -7,12 +7,14 @@ import { v4 as uuid4 } from "uuid";
 const MainView = (props) => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
+  const [isTyping, setIsTyping] = useState(false);
 
   const inputPlaceholder = "Ask anything";
   const initialGreeting = "What's on your mind today?";
 
   const handleSendMessage = () => {
-    if (input.trim()) {
+    if (input.trim() && !isTyping) {
+      setIsTyping(true);
       const userMessage = { text: input.trim(), sender: "user" };
       setMessages((prevMessages) => [...prevMessages, userMessage]);
       setInput("");
@@ -22,7 +24,7 @@ const MainView = (props) => {
         const aiResponse = {
           id: uuid4(),
           status: "typing",
-          text: `Understood: "${userMessage.text}". This is where the game logic would come in!`,
+          text: `Understood:\n\n"${userMessage.text}".\n\nThis is where the game logic would come in!`,
           sender: "ai",
         };
         setMessages((prevMessages) => [...prevMessages, aiResponse]);
@@ -31,6 +33,7 @@ const MainView = (props) => {
   };
 
   const handleAiTypingComplete = (messageId) => {
+    setIsTyping(false);
     setMessages((prevMessages) =>
       prevMessages.map((msg) =>
         msg.id === messageId ? { ...msg, status: "completed" } : msg,
@@ -60,6 +63,7 @@ const MainView = (props) => {
         onInputChange={(e) => setInput(e.target.value)}
         onSendMessage={handleSendMessage}
         placeholder={inputPlaceholder}
+        disabled={isTyping}
       />
     </Box>
   );
