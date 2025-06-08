@@ -27,7 +27,10 @@ function TypingEffect({ text, speed = 30, onComplete, variant = "body1" }) {
   }, [text]);
 
   return (
-    <Typography variant={variant} sx={{ fontSize: "inherit" }}>
+    <Typography
+      variant={variant}
+      sx={{ fontSize: "inherit", whiteSpace: "pre-wrap" }}
+    >
       {displayedText}
     </Typography>
   );
