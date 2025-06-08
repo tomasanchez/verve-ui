@@ -4,7 +4,7 @@ import Typography from "@mui/material/Typography";
 import ChatMessage from "./ChatMessage";
 import { spacing } from "../../theme/theme.js";
 
-function ChatWindow({ messages, initialGreeting }) {
+function ChatWindow({ messages, initialGreeting, onTypingComplete }) {
   const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
@@ -24,8 +24,8 @@ function ChatWindow({ messages, initialGreeting }) {
         paddingBottom: spacing(1),
         display: "flex",
         flexDirection: "column",
-        // Max width for content on larger screens, centered
-        maxWidth: { xs: "100%", sm: "600px", md: "750px" },
+        width: "100%",
+        maxWidth: { xs: "100%", sm: "600px", md: "750px", lg: "900px" },
         margin: "0 auto",
       }}
     >
@@ -59,10 +59,13 @@ function ChatWindow({ messages, initialGreeting }) {
       )}
 
       {messages.map((msg, index) => (
-        <ChatMessage key={index} message={msg} />
+        <ChatMessage
+          key={index}
+          message={msg}
+          onTypingComplete={onTypingComplete}
+        />
       ))}
-      <div ref={messagesEndRef} />
-      {/* Scroll target */}
+      <div id="last-message-scroll-target" ref={messagesEndRef} />
     </Box>
   );
 }
