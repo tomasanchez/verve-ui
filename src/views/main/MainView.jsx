@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import ChatWindow from "../../components/chat/ChatWindow.jsx";
 import ChatInput from "../../components/chat/ChatInput.jsx";
+import AppHeader from "../../components/header/AppHeader.jsx";
 import { v4 as uuid4 } from "uuid";
 
 const MainView = () => {
@@ -53,6 +54,7 @@ const MainView = () => {
         overflow: "hidden", // Prevent body scrollbars
       }}
     >
+      <AppHeader />
       <ChatWindow
         messages={messages}
         initialGreeting={messages.length === 0 ? initialGreeting : null}
