@@ -48,7 +48,7 @@ function ChatInput({
         // Max width for content on larger screens, centered
         width: "100%",
         maxWidth: { xs: "100%", sm: "600px", md: "750px", lg: "900px" },
-        margin: "2.5rem auto",
+        margin: "0 auto",
       }}
     >
       {/* This is the main rounded input container itself */}
