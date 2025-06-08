@@ -4,6 +4,105 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { useTheme } from "@mui/material/styles";
 import TypingEffect from "./TypingEffect.jsx";
+import IconButton from "@mui/material/IconButton";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import CheckIcon from "@mui/icons-material/Check";
+import { Tooltip } from "@mui/material";
+
+function MessageActions({ messageText }) {
+  const theme = useTheme();
+  const [copied, setCopied] = useState(false);
+
+  // Effect to reset the 'copied' state after a couple of seconds
+  useEffect(() => {
+    let timeoutId;
+    if (copied) {
+      timeoutId = setTimeout(() => {
+        setCopied(false);
+      }, 2000); // Reset 'copied' state after 2 seconds
+    }
+    return () => clearTimeout(timeoutId); // Cleanup timeout on unmount or re-render
+  }, [copied]);
+
+  const fallbackCopyTextToClipboard = (text) => {
+    const textArea = document.createElement("textarea");
+    textArea.value = text;
+
+    // Avoid scrolling to bottom
+    textArea.style.top = "0";
+    textArea.style.left = "0";
+    textArea.style.position = "fixed";
+    textArea.style.opacity = "0"; // Make it invisible
+
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+
+    try {
+      const successful = document.execCommand("copy");
+      if (successful) {
+        setCopied(true);
+      } else {
+        console.warn(
+          'Fallback copy failed: document.execCommand("copy") was unsuccessful.',
+        );
+      }
+    } catch (err) {
+      console.error("Fallback copy failed: ", err);
+    }
+
+    document.body.removeChild(textArea);
+  };
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(messageText);
+      setCopied(true); // Set to copied state
+    } catch (err) {
+      console.error("Failed to copy text: ", err);
+      fallbackCopyTextToClipboard(messageText);
+      // You could add a user-facing toast/snackbar notification here
+    }
+  };
+
+  return (
+    <Box
+      sx={{
+        display: "flex",
+        justifyContent: "flex-start", // Push buttons to the left
+        marginTop: theme.spacing(1), // Space between message text and actions
+        paddingRight: theme.spacing(0.5), // Small internal padding for the buttons row
+      }}
+    >
+      {/* Copy Button */}
+      <Tooltip title={copied ? "Copied" : "Copy"}>
+        <IconButton
+          onClick={handleCopy}
+          size="small"
+          aria-label={copied ? "Copied to clipboard" : "Copy to clipboard"}
+          sx={{
+            "& .MuiSvgIcon-root": { fontSize: "1.25rem" }, // Icon size
+            color: theme.palette.text.secondary, // Default color
+            "&:hover": {
+              color: theme.palette.text.primary, // Slightly darker on hover
+            },
+          }}
+        >
+          {copied ? (
+            <CheckIcon />
+          ) : (
+            <ContentCopyIcon /> // Default copy icon
+          )}
+        </IconButton>
+      </Tooltip>
+      {/* Placeholder for future buttons, e.g.,
+      <IconButton size="small">
+          <MoreHorizIcon sx={{ fontSize: '1.25rem' }} />
+      </IconButton>
+      */}
+    </Box>
+  );
+}
 
 function ChatMessage({ message, onTypingComplete }) {
   const theme = useTheme();
@@ -87,8 +186,9 @@ function ChatMessage({ message, onTypingComplete }) {
           sx={{
             color: theme.palette.text.primary, // AI text color
             wordBreak: "break-word",
-            fontSize: "1rem",
             flexGrow: 1, // Allow AI text to take up all available horizontal space
+            display: "flex",
+            flexDirection: "column",
             maxWidth: "100%", // Ensure it doesn't overflow its container
             // No background, no special border-radius, no shadow for AI messages
             // The horizontal padding is handled by the parent Box (current component's outer Box)
@@ -96,6 +196,8 @@ function ChatMessage({ message, onTypingComplete }) {
           }}
         >
           {displayedContent}
+          {/* NEW: Copy button for AI messages, shown only after typing completes */}
+          {typingIsComplete && <MessageActions messageText={message.text} />}
         </Box>
       )}
     </Box>
