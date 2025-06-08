@@ -1,5 +1,5 @@
 // src/components/ChatInput.jsx
-import React, { useRef, useState } from "react";
+import React from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import IconButton from "@mui/material/IconButton";
@@ -11,9 +11,6 @@ import { styled } from "@mui/material/styles";
 import Button from "@mui/material/Button";
 import { Tooltip } from "@mui/material"; // For custom styling
 
-const CHAT_INPUT_COLLAPSED_MAX_ROWS = 6;
-const CHAT_INPUT_EXPANDED_MAX_ROWS = 15;
-const CHAT_INPUT_EXPANDED_FIXED_HEIGHT_REM = 15;
 
 // Custom styled TextField to better match the examples' input background
 const CustomTextField = styled(TextField)(({ theme }) => ({
@@ -42,7 +39,6 @@ function ChatInput({
   disabled = false,
 }) {
   const theme = useTheme();
-  const [isExpanded, setIsExpanded] = useState(false);
 
   const handleKeyPress = (event) => {
     if (event.key === "Enter" && !event.shiftKey) {

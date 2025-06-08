@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import ChatWindow from "../../components/chat/ChatWindow.jsx";
-import ChatInput from "../../components/chat/ChatInpunt.jsx";
+import ChatInput from "../../components/chat/ChatInput.jsx";
 import { v4 as uuid4 } from "uuid";
 
-const MainView = (props) => {
+const MainView = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
