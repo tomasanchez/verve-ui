@@ -24,9 +24,9 @@ function ChatWindow({ messages, initialGreeting, onTypingComplete }) {
         paddingBottom: spacing(1),
         display: "flex",
         flexDirection: "column",
-        width: "100%",
-        maxWidth: { xs: "100%", sm: "600px", md: "750px", lg: "900px" },
-        margin: "0 auto",
+        // width: "100%",
+        // maxWidth: { xs: "100%", sm: "600px", md: "750px", lg: "900px" },
+        // margin: "0 auto",
         marginTop: spacing(1),
       }}
     >

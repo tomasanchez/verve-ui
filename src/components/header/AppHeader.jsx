@@ -16,7 +16,6 @@ export default function AppHeader() {
       position="sticky" // Stays at the top, pushes content down
       color="transparent" // Transparent background
       elevation={0} // No shadow
-      className="user-select-none"
       sx={{
         paddingX: {
           xs: theme.spacing(1),
@@ -35,7 +34,6 @@ export default function AppHeader() {
         {/* disableGutters removes default padding */}
         {/* Left Section: Verve with Tag */}
         <Box
-          className="pe-none"
           sx={{ display: "flex", alignItems: "center", gap: theme.spacing(1) }}
         >
           <Avatar
