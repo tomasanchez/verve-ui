@@ -66,7 +66,11 @@ function ChatWindow({ messages, initialGreeting, onTypingComplete }) {
           onTypingComplete={onTypingComplete}
         />
       ))}
-      <div id="last-message-scroll-target" ref={messagesEndRef} />
+      <div
+        id="last-message-scroll-target"
+        ref={messagesEndRef}
+        className="my-3"
+      />
     </Box>
   );
 }
