@@ -11,6 +11,7 @@ import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import ImageIcon from "@mui/icons-material/Image"; // Placeholder icon
 import { useTheme } from "@mui/material/styles";
+import { Tooltip } from "@mui/material";
 
 /**
  *
@@ -32,10 +33,6 @@ function SceneInfoCard({ place, characters }) {
     return `${date.toLocaleTimeString("en-US", optionsTime)} • ${date.toLocaleDateString("en-US", optionsDate)}`;
   };
 
-  // Limit characters displayed directly and calculate the remaining count
-  const visibleCharacters = characters; // Show first 3
-  const remainingCharactersCount = characters.length - visibleCharacters.length;
-
   return (
     <Card
       sx={{
@@ -45,7 +42,7 @@ function SceneInfoCard({ place, characters }) {
         boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
         minWidth: "18rem", // A fixed minimum width for the card itself
         maxWidth: "22rem", // Max width for larger screens
-        overflowY: "auto", // Scroll content if it overflows vertically
+        overflowY: "hidden", // Scroll content if it overflows vertically
         display: "flex",
         flexDirection: "column",
         // Optional: padding within the card if needed, but CardContent handles it well
@@ -84,7 +81,9 @@ function SceneInfoCard({ place, characters }) {
       </Box>
 
       {/* Card Content Section */}
-      <CardContent sx={{ flexGrow: 1, padding: theme.spacing(2) }}>
+      <CardContent
+        sx={{ flexGrow: 1, padding: theme.spacing(2), overflowY: "auto" }}
+      >
         {/* Date and Time */}
         <Typography
           variant="body2"
@@ -99,7 +98,10 @@ function SceneInfoCard({ place, characters }) {
         {/* Place Name */}
         <Typography
           variant="h2"
-          sx={{ fontWeight: "bold", marginBottom: theme.spacing(1) }}
+          sx={{
+            fontWeight: "bold",
+            marginBottom: theme.spacing(1),
+          }}
         >
           {place.name}
         </Typography>
@@ -127,7 +129,6 @@ function SceneInfoCard({ place, characters }) {
                   label={effect}
                   size="small"
                   sx={{
-                    color: theme.palette.text.primary,
                     borderRadius: "0.5rem", // Slightly rounded
                     padding: "0.1rem 0.5rem", // Adjust internal padding
                     fontSize: "0.75rem", // Smaller text
@@ -147,17 +148,19 @@ function SceneInfoCard({ place, characters }) {
             >
               Characters in Scene
             </Typography>
-            <AvatarGroup max={3} sx={{ flexGrow: 1, flexAlign: "start" }}>
+            <AvatarGroup max={4}>
               {characters.map((char) => (
-                <Avatar
-                  key={char.id}
-                  alt={char.name}
-                  src={char.avatarUrl}
-                  sx={{
-                    width: "2.5rem", // Adjust avatar size
-                    height: "2.5rem",
-                  }}
-                />
+                <Tooltip title={char.name} key={char.id} arrow>
+                  <Avatar
+                    key={char.id}
+                    alt={char.name}
+                    src={char.avatarUrl}
+                    sx={{
+                      width: "2.5rem", // Adjust avatar size
+                      height: "2.5rem",
+                    }}
+                  />
+                </Tooltip>
               ))}
             </AvatarGroup>
           </Box>
