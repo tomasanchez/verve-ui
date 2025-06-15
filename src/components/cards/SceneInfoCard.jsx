@@ -1,5 +1,5 @@
 // src/components/SceneInfoCard.jsx
-import React from "react";
+import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Avatar from "@mui/material/Avatar";
@@ -10,28 +10,55 @@ import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import ImageIcon from "@mui/icons-material/Image"; // Placeholder icon
+import Tooltip from "@mui/material/Tooltip";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
 import { useTheme } from "@mui/material/styles";
-import { Tooltip } from "@mui/material";
 
 /**
+ * SceneInfoCard component displays information about the current scene.
  *
- * @param {Setting} place
- * @param {[Character]} characters
- * @returns {React.JSX.Element|null}
+ * @param {Object} props - The component props.
+ * @param {Setting} props.place - The current setting/place data.
+ * @param {Character[]} props.characters - An array of characters in the current scene.
+ * @returns {React.JSX.Element} The rendered SceneInfoCard component.
  */
 function SceneInfoCard({ place, characters }) {
+  if (!place) {
+    return <></>; // Or render a loading/empty state
+  }
+
   const theme = useTheme();
 
-  if (!place) {
-    return null; // Or render a loading/empty state
-  }
+  // State for the avatar group overflow menu
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+
+  // Handles opening the menu when the +N avatar is clicked
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  // Handles closing the menu
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   // Format date and time for display
   const formatDateTime = (date) => {
+    if (date === null || date === undefined || date === "") {
+      return "Unknown";
+    }
+
     const optionsDate = { month: "short", day: "numeric", year: "numeric" };
     const optionsTime = { hour: "2-digit", minute: "2-digit", hour12: true };
     return `${date.toLocaleTimeString("en-US", optionsTime)} • ${date.toLocaleDateString("en-US", optionsDate)}`;
   };
+
+  // max={4} means AvatarGroup will show 3 individual avatars + 1 for the overflow (+N)
+  const maxAvatarsInGroup = 4;
+  // Calculate characters that will be in the menu (those beyond the 'max' - 1 visible)
+  const charactersInMenu = characters.slice(maxAvatarsInGroup - 1);
 
   return (
     <Card
@@ -148,7 +175,22 @@ function SceneInfoCard({ place, characters }) {
             >
               Characters in Scene
             </Typography>
-            <AvatarGroup max={4}>
+            <AvatarGroup
+              max={maxAvatarsInGroup}
+              // Custom props for the additional (+N) avatar
+              slotProps={{
+                additionalAvatar: {
+                  onClick: handleClick, // Attach click handler to open menu
+                  sx: {
+                    backgroundColor: theme.palette.action.selected, // Background for the +N avatar
+                    color: theme.palette.text.secondary,
+                    fontWeight: "bold",
+                    border: `0.5rem solid ${theme.palette.divider}`,
+                    cursor: "pointer", // Indicate it's clickable
+                  },
+                },
+              }}
+            >
               {characters.map((char) => (
                 <Tooltip title={char.name} key={char.id} arrow>
                   <Avatar
@@ -163,6 +205,50 @@ function SceneInfoCard({ place, characters }) {
                 </Tooltip>
               ))}
             </AvatarGroup>
+
+            {/* Menu for additional characters */}
+            <Menu
+              id="character-menu"
+              anchorEl={anchorEl} // The element the menu is anchored to
+              open={open} // Controls if the menu is open
+              onClose={handleClose} // Closes the menu
+              MenuListProps={{
+                "aria-labelledby": "basic-button", // Good practice for accessibility
+              }}
+              sx={{
+                "& .MuiPaper-root": {
+                  // Styles the Menu's paper (background)
+                  backgroundColor: theme.palette.background.paper,
+                  borderRadius: "0.75rem",
+                  boxShadow: theme.shadows[3],
+                },
+              }}
+            >
+              {/* Map over characters that should appear in the menu */}
+              {charactersInMenu.map((char) => (
+                <MenuItem
+                  key={char.id}
+                  onClick={handleClose} // Close menu when an item is clicked
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: theme.spacing(1),
+                    color: theme.palette.text.primary,
+                    "&:hover": {
+                      backgroundColor: theme.palette.action.hover, // Subtle hover effect
+                    },
+                    padding: theme.spacing(1, 2), // Adjust internal padding for menu items
+                  }}
+                >
+                  <Avatar
+                    alt={char.name}
+                    src={char.avatarUrl}
+                    sx={{ width: "2.5rem", height: "2.5rem" }} // Slightly smaller avatars in menu
+                  />
+                  <Typography variant="body1">{char.name}</Typography>
+                </MenuItem>
+              ))}
+            </Menu>
           </Box>
         )}
       </CardContent>
