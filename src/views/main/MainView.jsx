@@ -5,8 +5,13 @@ import ChatInput from "../../components/chat/ChatInput.jsx";
 import AppHeader from "../../components/header/AppHeader.jsx";
 import { v4 as uuid4 } from "uuid";
 import SceneInfoCard from "../../components/cards/SceneInfoCard.jsx";
-import { mockCharacters, mockPlace } from "../../mocks/mockdata.js";
+import {
+  mockCharacters,
+  mockPlace,
+  mockProtagonist,
+} from "../../mocks/mockdata.js";
 import { useTheme } from "@mui/material/styles";
+import ProtagonistCard from "../../components/cards/ProtagonistCard.jsx";
 
 const MainView = () => {
   const [messages, setMessages] = useState([]);
@@ -76,6 +81,20 @@ const MainView = () => {
       >
         <Box
           sx={{
+            // NEW: Hide on xs/sm, display as flex on md and up
+            display: { xs: "none", lg: "flex" },
+            justifyContent: "flex-start", // Align card to the right within its flex container
+            paddingY: { xs: 0, md: theme.spacing(2), lg: theme.spacing(4) }, // Vertical padding to align with chat window
+            // The SceneInfoCard itself has min/max width, so this wrapper doesn't need it
+            flexShrink: 0, // Prevent this pane from shrinking
+            boxSizing: "border-box",
+            margin: "0 auto",
+          }}
+        >
+          <ProtagonistCard protagonist={mockProtagonist} />
+        </Box>
+        <Box
+          sx={{
             display: "flex",
             flexDirection: "column",
             flexGrow: 1, // Takes up available space
@@ -103,11 +122,10 @@ const MainView = () => {
         <Box
           sx={{
             // NEW: Hide on xs/sm, display as flex on md and up
-            display: { xs: "none", md: "flex" },
+            display: { xs: "none", lg: "flex" },
             justifyContent: "flex-end", // Align card to the right within its flex container
             paddingY: { xs: 0, md: theme.spacing(2), lg: theme.spacing(4) }, // Vertical padding to align with chat window
             // The SceneInfoCard itself has min/max width, so this wrapper doesn't need it
-            height: "100%", // Take full height
             flexShrink: 0, // Prevent this pane from shrinking
             boxSizing: "border-box",
             margin: "0 auto",

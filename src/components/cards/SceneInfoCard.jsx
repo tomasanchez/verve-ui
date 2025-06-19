@@ -176,6 +176,9 @@ function SceneInfoCard({ place, characters }) {
               Characters in Scene
             </Typography>
             <AvatarGroup
+              sx={{
+                justifyContent: "start",
+              }}
               max={maxAvatarsInGroup}
               // Custom props for the additional (+N) avatar
               slotProps={{
@@ -185,6 +188,8 @@ function SceneInfoCard({ place, characters }) {
                     backgroundColor: theme.palette.action.selected, // Background for the +N avatar
                     color: theme.palette.text.secondary,
                     fontWeight: "bold",
+                    width: "3rem",
+                    height: "3rem",
                     border: `0.5rem solid ${theme.palette.divider}`,
                     cursor: "pointer", // Indicate it's clickable
                   },
@@ -198,8 +203,8 @@ function SceneInfoCard({ place, characters }) {
                     alt={char.name}
                     src={char.avatarUrl}
                     sx={{
-                      width: "2.5rem", // Adjust avatar size
-                      height: "2.5rem",
+                      width: "3rem", // Adjust avatar size
+                      height: "3rem",
                     }}
                   />
                 </Tooltip>
@@ -212,9 +217,6 @@ function SceneInfoCard({ place, characters }) {
               anchorEl={anchorEl} // The element the menu is anchored to
               open={open} // Controls if the menu is open
               onClose={handleClose} // Closes the menu
-              MenuListProps={{
-                "aria-labelledby": "basic-button", // Good practice for accessibility
-              }}
               sx={{
                 "& .MuiPaper-root": {
                   // Styles the Menu's paper (background)
@@ -243,7 +245,7 @@ function SceneInfoCard({ place, characters }) {
                   <Avatar
                     alt={char.name}
                     src={char.avatarUrl}
-                    sx={{ width: "2.5rem", height: "2.5rem" }} // Slightly smaller avatars in menu
+                    sx={{ width: "3rem", height: "3rem" }} // Slightly smaller avatars in menu
                   />
                   <Typography variant="body1">{char.name}</Typography>
                 </MenuItem>
