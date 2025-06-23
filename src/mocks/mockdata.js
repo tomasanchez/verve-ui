@@ -22,11 +22,11 @@ export const mockPlace = {
 };
 
 /**
- * @typedef {Object} Effect
- * @property {string} id
+ * @typedef {Object} NarrativeEffect
+ * @property {string} [id]
  * @property {string} name
  * @property {string} [description]
- * @property {string} [color] // Hex color for the chip, e.g., '#FFDF72'
+ * @property {number} value
  */
 
 /**

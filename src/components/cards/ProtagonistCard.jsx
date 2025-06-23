@@ -19,6 +19,7 @@ import TrackChangesIcon from "@mui/icons-material/TrackChanges"; // Skills Icon
 import Tooltip from "@mui/material/Tooltip";
 import { useTheme } from "@mui/material/styles";
 import CardMedia from "@mui/material/CardMedia";
+import SkillsDialog from "../dialogs/SkillsDialog.jsx";
 
 /**
  * @typedef {Object} Trait
@@ -36,10 +37,17 @@ import CardMedia from "@mui/material/CardMedia";
  */
 function ProtagonistCard({ protagonist }) {
   const theme = useTheme();
-
   if (!protagonist) {
     return null; // Or render a loading/empty state
   }
+  const [skillsDialogOpen, setSkillsDialogOpen] = React.useState(false);
+
+  const handleSkillsDialogOpen = () => {
+    setSkillsDialogOpen(true);
+  };
+  const handleSkillsDialogClose = () => {
+    setSkillsDialogOpen(false);
+  };
 
   return (
     <Card
@@ -160,7 +168,7 @@ function ProtagonistCard({ protagonist }) {
               </ListItemButton>
             </ListItem>
             <ListItem disablePadding>
-              <ListItemButton>
+              <ListItemButton onClick={handleSkillsDialogOpen}>
                 <ListItemIcon>
                   <TrackChangesIcon />
                 </ListItemIcon>
@@ -170,6 +178,7 @@ function ProtagonistCard({ protagonist }) {
           </List>
         </Box>
       </CardContent>
+      <SkillsDialog open={skillsDialogOpen} onClose={handleSkillsDialogClose} />
     </Card>
   );
 }
